@@ -1,16 +1,16 @@
 const router = require("express").Router();
-const { User } = require("../db");
+const Users = require("../models/users");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
 router.get("/", async (req, res) => {
 	try {
-		const users = await User.findAll({
+		const user = await Users.findAll({
 			include: [
 				{ model: Message }, // optional { all: true }
 			],
 		});
-		restart.status(200).json({ users });
+		restart.status(200).json({ user });
 	} catch (error) {
 		res.status(500).json({ error });
 	}
@@ -18,9 +18,9 @@ router.get("/", async (req, res) => {
 
 router.post("/register", (req, res) => {
 	// const { email, password, firstName, lastName, roleID } = req.body;
-	User.create({
+	Users.create({
 		email: "iaingould@email.com",
-		password: "pasword", // bcrypt.hashSync(req.body.password, 13),
+		password: "password", // bcrypt.hashSync(req.body.password, 13),
 		firstName: "Iain",
 		midInit: "",
 		lastName: "Gould",
@@ -45,7 +45,7 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-	User.findOne({
+	Users.findOne({
 		where: {
 			email: req.body.email,
 		},
