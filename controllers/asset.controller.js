@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const { Asset } = require("../db");
-const { uuid } = require("uuidv4");
+const Assets = require("../models/assets");
 const validate = require("../middleware/authSession");
+const { uuid } = require("uuidv4");
 
 router.get("/", async (req, res) => {
 	try {
@@ -15,9 +15,9 @@ router.get("/", async (req, res) => {
 
 router.get("/asset", validate, async (req, res) => {
 	try {
-		const assets = await Asset.findOne({
+		const assets = await Assets.findOne({
 			where: {
-				// email: req.body.email,
+				// asset_tag: req.body.asset_tag,
 				asset_tag: "d0cd384c-e064-11eb-95d0-7b32dd39c3b4",
 			},
 		});
@@ -31,7 +31,7 @@ router.post("/", validate, async (req, res) => {
 	req.body.asset_tag = uuid(); // assetTag.split('-')[0].toUpperCase();
 	console.log(req.body.asset_tag);
 	try {
-		const asset = await Asset.create(req.body);
+		const asset = await Assets.create(req.body);
 
 		if (asset) {
 			res.status(200).json({ message: "Created asset", asset });

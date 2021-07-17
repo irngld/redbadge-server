@@ -1,12 +1,12 @@
 const router = require("express").Router();
-const { Role } = require("../models");
+const Roles = require("../models/roles");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
 router.get("/", async (req, res) => {
 	// Test for role
 	try {
-		const users = await Role.findAll({
+		const users = await Roles.findAll({
 			include: [
 				{ model: Message }, // optional { all: true }
 			],
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 
 router.post("/register", (req, res) => {
 	const { role } = req.body;
-	Role.create({
+	Roles.create({
 		role,
 	})
 		.then((role) => {
@@ -39,7 +39,7 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-	Role.findOne({
+	Roles.findOne({
 		where: {
 			email: req.body.email,
 		},

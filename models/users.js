@@ -48,7 +48,7 @@ const Users = database.define("users", {
 	},
 });
 
-Users.hasOne(Roles);
+// Users.hasOne(Roles);
 // Roles.belongsToMany(Users);
 
 module.exports = Users;
