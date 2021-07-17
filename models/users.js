@@ -1,39 +1,39 @@
 const Roles = require("./roles");
 
-const { DataTypes, CHAR } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const database = require("../db");
 
 const Users = database.define("users", {
 	email: {
 		type: DataTypes.STRING,
-		allowNull: false,
+		allowNull: true, //false,
 		unique: true,
 	},
 	password: {
 		type: DataTypes.STRING,
-		allowNull: false,
+		allowNull: true, //false,
 		unique: false,
 	},
 	firstName: {
-		type: DataTypes.STRING(20),
-		allowNull: false,
+		type: DataTypes.STRING,
+		allowNull: true, //false,
 		unique: false,
 	},
 	midInit: {
-		type: DataTypes.STRING(5),
+		type: DataTypes.STRING,
 		allowNull: true,
 	},
 	lastName: {
-		type: DataTypes.STRING(20),
-		allowNull: false,
+		type: DataTypes.STRING,
+		allowNull: true, //false,
 		unique: false,
 	},
 	suffix: {
-		type: DataTypes.STRING(5),
+		type: DataTypes.STRING,
 		allowNull: true,
 	},
 	title: {
-		type: DataTypes.STRING(5),
+		type: DataTypes.STRING,
 		allowNull: true,
 	},
 	dept: {
@@ -42,13 +42,13 @@ const Users = database.define("users", {
 	},
 	roleID: {
 		type: DataTypes.INTEGER,
-		allowNull: false,
+		allowNull: true, //false,
 		unique: false,
 		// defaultValue:
 	},
 });
 
 Users.hasOne(Roles);
-Roles.belongsToMany(Users);
+// Roles.belongsToMany(Users);
 
-exports.default = Users;
+module.exports = Users;
