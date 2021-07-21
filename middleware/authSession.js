@@ -1,19 +1,15 @@
 const JWT = require("jsonwebtoken");
-const { User } = require("../db");
+const User = require("../models/users");
 
 const validateSession = (req, res, next) => {
 	const token = req.headers.authorization;
 
-	console.log("validateSession", req.headers);
-
 	if (!token) {
-		console.log("token:", token);
 		return res.status(403).json({
 			auth: false,
 			message: "No token provided",
 		});
 	} else {
-		console.log(token);
 		JWT.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
 			if (!err && decodedToken) {
 				User.findOne({
@@ -22,14 +18,12 @@ const validateSession = (req, res, next) => {
 					},
 				})
 					.then((user) => {
-						if (!user) throw err;
-
+						if (!user) throw new Error("Not Authorized!");
 						req.user = user;
 						return next();
 					})
 					.catch((err) => next(err));
 			} else {
-				console.log(err);
 				req.errors = err;
 				return res.status(500).send("Not Authorized");
 			}

@@ -17,6 +17,10 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.6.0",
     "sequelize": "^6.6.4",
+    "sequelize-auto-migrations": "^1.0.3",
     "uuidv4": "^6.2.10"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
   }
 }

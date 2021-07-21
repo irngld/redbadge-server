@@ -48,7 +48,7 @@ const Users = database.define("users", {
 	},
 });
 
-// Users.hasOne(Roles);
-// Roles.belongsToMany(Users);
+Roles.hasMany(Users);
+Users.belongsTo(Roles); // A user will only have one role
 
 module.exports = Users;

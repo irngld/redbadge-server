@@ -4,8 +4,8 @@ const database = require("../db");
 const Assets = database.define("assets", {
 	asset_tag: {
 		type: DataTypes.STRING,
-		allowNull: false,
-		unique: true,
+		// allowNull: false,
+		// unique: true,
 	},
 	serial_number: {
 		type: DataTypes.STRING,

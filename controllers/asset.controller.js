@@ -1,45 +1,90 @@
 const router = require("express").Router();
-const Assets = require("../models/assets");
-const validate = require("../middleware/authSession");
 const { uuid } = require("uuidv4");
+const validate = require("../middleware/authSession");
+const Assets = require("../models/assets");
 
+// READ /asset/
 router.get("/", async (req, res) => {
 	try {
-		const assets = await Asset.findAll();
-
-		restart.status(200).json({ assets });
+		const assets = await Assets.findAll();
+		res.status(200).json(assets);
 	} catch (error) {
 		res.status(500).json({ error });
 	}
 });
 
-router.get("/asset", validate, async (req, res) => {
+// READ /asset/:id
+router.get("/:id", validate, async (req, res) => {
 	try {
-		const assets = await Assets.findOne({
+		const asset = await Assets.findOne({
 			where: {
-				// asset_tag: req.body.asset_tag,
-				asset_tag: "d0cd384c-e064-11eb-95d0-7b32dd39c3b4",
+				asset_tag: req.params.id,
 			},
 		});
-		res.status(200).json({ assets });
-	} catch (error) {
-		res.status(500).json({ error });
-	}
-});
-
-router.post("/", validate, async (req, res) => {
-	req.body.asset_tag = uuid(); // assetTag.split('-')[0].toUpperCase();
-	console.log(req.body.asset_tag);
-	try {
-		const asset = await Assets.create(req.body);
-
-		if (asset) {
-			res.status(200).json({ message: "Created asset", asset });
+		if (!asset) {
+			throw new Error("Asset not found!");
 		} else {
-			res.status(404).json({ message: "Could not create" });
+			res.status(200).json(asset);
 		}
 	} catch (error) {
 		res.status(500).json({ error });
+	}
+});
+
+// CREATE  /asset/
+router.post("/", validate, async (req, res) => {
+	try {
+		const asset = await Assets.create({
+			asset_tag: uuid(),
+			serial_number: req.body.serial_number,
+			make: req.body.make,
+			series: req.body.series,
+			model: req.body.model,
+			dev_type: req.body.dev_type,
+			form_factor: req.body.form_factor,
+		});
+		res.status(200).json(asset);
+	} catch (error) {
+		res.status(500).json({ error });
+	}
+});
+
+// UPDATE /asset/
+router.put("/:id", validate, async (req, res) => {
+	try {
+		const asset = await Assets.update(
+			{
+				asset_tag: req.params.id,
+				serial_number: req.body.serial_number,
+				make: req.body.make,
+				series: req.body.series,
+				model: req.body.model,
+				dev_type: req.body.dev_type,
+				form_factor: req.body.form_factor,
+			},
+			{
+				where: {
+					asset_tag: req.params.id,
+				},
+			}
+		);
+		res.status(200).json(asset);
+	} catch (error) {
+		res.status(500).json({ error }); // never return in the real world (check it before returning it)!
+	}
+});
+
+// DELETE /asset/:id
+router.delete("/:id", validate, async (req, res) => {
+	try {
+		await Assets.destroy({
+			where: {
+				asset_tag: req.params.id,
+			},
+		});
+		res.status(200).json({ message: "Successfully deleted!" });
+	} catch (error) {
+		res.status(500).json({ error }); // never return in the real world (check it before returning it)!
 	}
 });
 

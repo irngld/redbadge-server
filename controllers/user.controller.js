@@ -1,42 +1,40 @@
-const router = require("express").Router();
-const Users = require("../models/users");
+const router = require("express").Router(); // Absolutes goto the top
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
+const Users = require("../models/users"); // relatives/locals goto the bottom
 
-router.get("/", async (req, res) => {
-	try {
-		const user = await Users.findAll({
-			include: [
-				{ model: Message }, // optional { all: true }
-			],
-		});
-		restart.status(200).json({ user });
-	} catch (error) {
-		res.status(500).json({ error });
-	}
-});
+// router.get("/", async (req, res) => {
+// 	try {
+// 		const user = await Users.findAll({
+// 			include: [
+// 				{ model: Message }, // optional { all: true }
+// 			],
+// 		});
+// 		restart.status(200).json({ user });
+// 	} catch (error) {
+// 		res.status(500).json({ error });
+// 	}
+// });
 
 router.post("/register", (req, res) => {
-	// const { email, password, firstName, lastName, roleID } = req.body;
 	Users.create({
-		email: "iaingould@email.com",
-		password: "password", // bcrypt.hashSync(req.body.password, 13),
-		firstName: "Iain",
-		midInit: "",
-		lastName: "Gould",
-		suffix: "",
-		dept: "",
-		roleID: 3,
+		email: req.body.email,
+		password: bcrypt.hashSync(req.body.password, 13),
+		firstName: req.body.firstName,
+		midInit: req.body.midInit,
+		lastName: req.body.lastName,
+		suffix: req.body.suffix,
+		dept: req.body.dept,
+		roleID: req.body.roleID,
 	})
 		.then((user) => {
 			let token = JWT.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-			res.send({
+			res.status(200).send({
 				user,
 				token,
 			});
 		})
 		.catch((error) => {
-			console.log(error);
 			res.status(500).send({
 				message: "User not created",
 				error: error.errors[0].message,
@@ -52,14 +50,13 @@ router.post("/login", (req, res) => {
 	}).then((user) => {
 		if (user) {
 			//  compare passwords
-			bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
-				isMatch ? generateToken(user) : res.send("Incorrect Password");
-			});
 			function generateToken(user) {
-				let token = JWT.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-				console.log(token);
+				const token = JWT.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 				res.send({ user, token });
 			}
+			bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+				isMatch ? generateToken(user) : res.send("Login failed!");
+			});
 		} else {
 			res.send("Login failed!");
 		}
