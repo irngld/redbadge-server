@@ -26,7 +26,7 @@ LifeCycle.belongsTo(Users);
 
 LifeCycle.belongsTo(Users, {
 	as: "assignedTo",
-	foreignkey: "assignedToId",
+	foreignkey: "assignedToID",
 });
 
 // LifeCycle.hasOne(Roles);

@@ -6,7 +6,9 @@ const Assets = require("../models/assets");
 // READ /asset/
 router.get("/", async (req, res) => {
 	try {
-		const assets = await Assets.findAll();
+		const assets = await Assets.findAll({
+			include: { all: true }, // [Users, LifeCycle, Roles]
+		}); // need to know the associated lifecycle
 		res.status(200).json(assets);
 	} catch (error) {
 		res.status(500).json({ error });
@@ -33,6 +35,7 @@ router.get("/:id", validate, async (req, res) => {
 
 // CREATE  /asset/
 router.post("/", validate, async (req, res) => {
+	//
 	try {
 		const asset = await Assets.create({
 			asset_tag: uuid(),
