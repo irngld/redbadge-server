@@ -54,10 +54,12 @@ router.post("/", validate, async (req, res) => {
 
 // UPDATE /asset/
 router.put("/:id", validate, async (req, res) => {
+	console.log(req.body);
+	console.log(req.params.id);
 	try {
 		const asset = await Assets.update(
 			{
-				asset_tag: req.params.id,
+				id: req.params.id,
 				serial_number: req.body.serial_number,
 				make: req.body.make,
 				series: req.body.series,
@@ -67,7 +69,7 @@ router.put("/:id", validate, async (req, res) => {
 			},
 			{
 				where: {
-					asset_tag: req.params.id,
+					id: req.params.id,
 				},
 			}
 		);
@@ -82,7 +84,7 @@ router.delete("/:id", validate, async (req, res) => {
 	try {
 		await Assets.destroy({
 			where: {
-				asset_tag: req.params.id,
+				id: req.params.id,
 			},
 		});
 		res.status(200).json({ message: "Successfully deleted!" });
