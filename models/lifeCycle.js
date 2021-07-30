@@ -19,14 +19,16 @@ const LifeCycle = database.define("lifeCycle", {
 });
 
 Assets.hasMany(LifeCycle);
-LifeCycle.belongsTo(Assets); // belongsTo adds an "ID", I want to have a key to link it to the table that it belongs to
+LifeCycle.belongsTo(Assets); // belongsTo adds an "ID". Used to link table it belongs to
 
 Users.hasMany(LifeCycle);
 LifeCycle.belongsTo(Users);
-
+// Users.hasMany(LifeCycle, {
+// 	as: "assigned",
+// });
 LifeCycle.belongsTo(Users, {
 	as: "assignedTo",
-	foreignkey: "assignedToID",
+	foreignkey: "assignedToId",
 });
 
 // LifeCycle.hasOne(Roles);

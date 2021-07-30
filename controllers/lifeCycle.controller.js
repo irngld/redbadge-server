@@ -56,7 +56,7 @@ router.put("/:id", validate, async (req, res) => {
 				assetId: req.body.assetId,
 				userId: req.body.userId,
 				roleId: req.body.roleId,
-				assignedToId: req.body.assignedToId,
+				assignedTo: req.body.assignedToId,
 			},
 			{
 				where: {

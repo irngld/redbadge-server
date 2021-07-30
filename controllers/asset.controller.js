@@ -8,6 +8,7 @@ router.get("/", async (req, res) => {
 	try {
 		const assets = await Assets.findAll({
 			include: { all: true }, // [Users, LifeCycle, Roles]
+			limit: 200,
 		}); // need to know the associated lifecycle
 		res.status(200).json(assets);
 	} catch (error) {
@@ -35,7 +36,6 @@ router.get("/:id", validate, async (req, res) => {
 
 // CREATE  /asset/
 router.post("/", validate, async (req, res) => {
-	//
 	try {
 		const asset = await Assets.create({
 			asset_tag: uuid(),
@@ -54,8 +54,6 @@ router.post("/", validate, async (req, res) => {
 
 // UPDATE /asset/
 router.put("/:id", validate, async (req, res) => {
-	console.log(req.body);
-	console.log(req.params.id);
 	try {
 		const asset = await Assets.update(
 			{
@@ -75,7 +73,7 @@ router.put("/:id", validate, async (req, res) => {
 		);
 		res.status(200).json(asset);
 	} catch (error) {
-		res.status(500).json({ error }); // never return in the real world (check it before returning it)!
+		res.status(500).json({ error }); // check the error content before returning in real world scenario!
 	}
 });
 
@@ -89,7 +87,7 @@ router.delete("/:id", validate, async (req, res) => {
 		});
 		res.status(200).json({ message: "Successfully deleted!" });
 	} catch (error) {
-		res.status(500).json({ error }); // never return in the real world (check it before returning it)!
+		res.status(500).json({ error }); // check the error content before returning in real world scenario!
 	}
 });
 

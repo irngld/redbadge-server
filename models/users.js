@@ -40,7 +40,7 @@ const Users = database.define("users", {
 		type: DataTypes.STRING,
 		allowNull: true,
 	},
-	roleID: {
+	roleId: {
 		type: DataTypes.INTEGER,
 		allowNull: true, //false,
 		unique: false,

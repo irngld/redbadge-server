@@ -3,11 +3,12 @@ const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 const Users = require("../models/users"); // relatives/locals goto the bottom
 
+// ### EXAMPLE ###
 // router.get("/", async (req, res) => {
 // 	try {
 // 		const user = await Users.findAll({
 // 			include: [
-// 				{ model: Message }, // optional { all: true }
+// 				{ model: LifeCycle }, // include: { all: true }, // [Users, LifeCycle, Roles]
 // 			],
 // 		});
 // 		restart.status(200).json({ user });
@@ -25,7 +26,7 @@ router.post("/register", (req, res) => {
 		lastName: req.body.lastName,
 		suffix: req.body.suffix,
 		dept: req.body.dept,
-		roleID: req.body.roleID,
+		roleId: req.body.roleId,
 	})
 		.then((user) => {
 			let token = JWT.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
