@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
 	try {
 		const assets = await Assets.findAll({
 			include: { all: true }, // [Users, LifeCycle, Roles]
-			limit: 200,
+			limit: 200, // limit set for demo purposes only
 		}); // need to know the associated lifecycle
 		res.status(200).json(assets);
 	} catch (error) {
@@ -73,7 +73,7 @@ router.put("/:id", validate, async (req, res) => {
 		);
 		res.status(200).json(asset);
 	} catch (error) {
-		res.status(500).json({ error }); // check the error content before returning in real world scenario!
+		res.status(500).json({ error }); // always check the error content before returning in real world scenario!
 	}
 });
 
